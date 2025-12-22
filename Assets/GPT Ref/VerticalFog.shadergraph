@@ -98,7 +98,11 @@
         }
     ],
     "m_GroupDatas": [],
-    "m_StickyNoteDatas": [],
+    "m_StickyNoteDatas": [
+        {
+            "m_Id": "d579e496a47d4f7eb9ff20ca9278c79b"
+        }
+    ],
     "m_Edges": [
         {
             "m_OutputSlot": {
@@ -2078,6 +2082,26 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "d579e496a47d4f7eb9ff20ca9278c79b",
+    "m_Title": "Cheater!",
+    "m_Content": "I use white emission color to simulate white fog. heh heh. Maybe porta was right, the artist's job is to lie",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -949.2972412109375,
+        "y": 443.9630126953125,
+        "width": 200.0,
+        "height": 160.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
 }
 
 {
