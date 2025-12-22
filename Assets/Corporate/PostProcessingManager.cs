@@ -49,6 +49,6 @@ public class PostProcessingManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        DOF.focalLength.value = 1f;
+        //DOF.focalLength.value = 1f;
     }
 }
