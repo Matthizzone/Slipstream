@@ -2,50 +2,72 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
-    public Quaternion rot;
+    public float MOVE_FORCE = 100f;
+    public float MOVE_DRAG = 5f;
+    public float JUMP_POWER = 100f;
 
-    void Start()
+    Rigidbody Torso;
+
+    public static PlayerControls instance;
+
+    private void Awake()
     {
-        foreach (Transform child in transform)
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        Torso = transform.Find("Torso").GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        Jump();
+    }
+
+    void FixedUpdate()
+    {
+        Move();
+        ApplyDrag();
+    }
+
+    void Move()
+    {
+        Vector3 move_dir = InputManager.instance.LeftStickCamera();
+
+        Torso.AddForce(move_dir * MOVE_FORCE, ForceMode.Force);
+
+        Vector3 flat_vel = Torso.velocity;
+        flat_vel.y = 0;
+        if (flat_vel.magnitude > 0.1f)
         {
-            ConfigurableJoint joint = child.GetComponent<ConfigurableJoint>();
-
-            if (joint == null) continue;
-
-            joint.autoConfigureConnectedAnchor = false;
-            joint.anchor = Vector3.zero;
-            joint.connectedAnchor = transform.Find("Torso").InverseTransformPoint(transform.position);
-            joint.rotationDriveMode = RotationDriveMode.Slerp;
-            joint.slerpDrive = new JointDrive
-            {
-                positionSpring = 800,
-                positionDamper = 80,
-                maximumForce = Mathf.Infinity
-            };
-
+            Torso.transform.LookAt(Torso.position + flat_vel);
         }
     }
 
-    void Update()
+    void ApplyDrag()
     {
-        foreach (Transform child in transform)
-        {
-            ConfigurableJoint joint = child.GetComponent<ConfigurableJoint>();
+        Vector3 flat_vel = Torso.velocity;
+        flat_vel.y = 0;
+        flat_vel = MattMath.FRIndepLerp(flat_vel, Vector3.zero, MOVE_DRAG);
 
-            if (joint == null) continue;
-
-            joint.targetRotation = rot;
-
-
-        }
+        Torso.velocity = new Vector3(
+            flat_vel.x,
+            Torso.velocity.y,
+            flat_vel.z);
     }
 
-    public static void SetJointTargetRotation(
-        ConfigurableJoint joint, Quaternion targetWorldRotation, Quaternion jointWorldRotation)
+    void Jump()
     {
-        Quaternion targetLocal = Quaternion.Inverse(jointWorldRotation) * targetWorldRotation;
+        if (!InputManager.instance.Pressed(InputManager.Buttons.A)) return;
 
-        joint.targetRotation = Quaternion.Inverse(targetLocal);
+        Torso.AddForce(Vector3.up * JUMP_POWER, ForceMode.Impulse);
     }
 
+
+    public Vector3 GetPos()
+    {
+        return Torso.position;
+    }
 }

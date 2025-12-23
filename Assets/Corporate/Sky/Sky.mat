@@ -7,10 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Skybox Gradient 1
+  m_Name: Sky
   m_Shader: {fileID: 4800000, guid: 4c7899e2f834ca14896c860c7b3d908c, type: 3}
-  m_ValidKeywords:
-  - _SCREENSPACE_ON
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -18,6 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -70,14 +72,14 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Screenspace: 1
+    - _Screenspace: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     - _mult: 1
-    - _pwer: 1
+    - _pwer: 1.83
     m_Colors:
     - _Bottom: {r: 0.8627451, g: 0.94011337, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
