@@ -246,7 +246,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223114675}
-  m_Material: {fileID: 13400000, guid: e777d5ffe8714804983601ab665ca79a, type: 2}
+  m_Material: {fileID: 13400000, guid: 4588677cfdf35da42ac0c026c68a83f4, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -335,7 +335,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 5
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 20
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -350,7 +350,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!1 &317216780
 GameObject:
@@ -509,6 +509,8 @@ MonoBehaviour:
   MOVE_FORCE: 200
   MOVE_DRAG: 5
   JUMP_POWER: 80
+  TILT_POWER: 100
+  TILT_CORRECTION: 1000
 --- !u!1 &505502119
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +525,7 @@ GameObject:
   - component: {fileID: 505502120}
   - component: {fileID: 505502124}
   - component: {fileID: 505502125}
+  - component: {fileID: 505502126}
   m_Layer: 0
   m_Name: Wheel
   m_TagString: Untagged
@@ -703,7 +706,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_YDrive:
     serializedVersion: 4
-    positionSpring: 1000
+    positionSpring: 100000
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -745,6 +748,18 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &505502126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505502119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89ba9d4148594e46b6cd2ca79a45c02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
