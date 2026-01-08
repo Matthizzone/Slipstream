@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraBehavior : MonoBehaviour
+public class CameraBehaviorPogo : MonoBehaviour
 {
     public Transform subject;
     public Vector3 positionOffset;
