@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
+public class PlayerControlsTEST : MonoBehaviour
 {
     public float MOVE_FORCE = 200f;
     public float MOVE_DRAG = 5f;
@@ -12,7 +12,7 @@ public class PlayerControls : MonoBehaviour
     Rigidbody Torso;
     Rigidbody Wheel;
 
-    public static PlayerControls instance;
+    public static PlayerControlsTEST instance;
 
     bool is_grounded;
 

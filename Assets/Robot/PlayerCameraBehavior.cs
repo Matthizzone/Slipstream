@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraBehaviorPogo : MonoBehaviour
+public class PlayerCameraBehavior : MonoBehaviour
 {
     public Transform subject;
     public Vector3 positionOffset;
@@ -13,15 +13,8 @@ public class CameraBehaviorPogo : MonoBehaviour
     Vector3 subj_vel_smooth_vel;
     public float smoothTime = 1;
 
-    const float LOOK_DOWN_HEIGHT_INFLUENCE = 0.03f;
-    const float LOOK_DOWN_MAX_ROTATION = 60f;
-    float lookDownAmt;
-    float lookDownAmtSmooth;
-    float lookDownAmtSmoothVel;
 
     public float rotationPower;
-
-    public float shakeAmount;
 
     public LayerMask GroundLayers;
 
@@ -29,10 +22,10 @@ public class CameraBehaviorPogo : MonoBehaviour
 
     private void Start()
     {
-        subj_vel_smooth = subject.forward;
+        subj_vel_smooth = transform.forward;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         UpdateSubVelSmooth();
         CalculateLookDown();
@@ -43,6 +36,8 @@ public class CameraBehaviorPogo : MonoBehaviour
 
         prev_subj_pos = subject.position;
     }
+
+
 
     void UpdateSubVelSmooth()
     {
@@ -84,14 +79,6 @@ public class CameraBehaviorPogo : MonoBehaviour
 
         transform.position = subject.position + cam_offset;
         transform.LookAt(subject.position + lookatOffset + Vector3.up * 3 * lookUpAmt);
-
-
-
-        transform.Rotate(new Vector3(
-            Random.Range(-shakeAmount, shakeAmount),
-            Random.Range(-shakeAmount, shakeAmount),
-            Random.Range(-shakeAmount, shakeAmount)
-            ));
     }
 
     void RightStickEffect()
@@ -102,12 +89,22 @@ public class CameraBehaviorPogo : MonoBehaviour
         subj_vel_smooth = Quaternion.AngleAxis(rot_amt * Time.deltaTime * rotationPower, Vector3.up) * subj_vel_smooth;
     }
 
+
+
+
+
+    const float LOOK_DOWN_HEIGHT_INFLUENCE = 0.03f;
+    const float LOOK_DOWN_MAX_ROTATION = 60f;
+    float lookDownAmt;
+    float lookDownAmtSmooth;
+    float lookDownAmtSmoothVel;
+
     void CalculateLookDown()
     {
-        float height = 100;
+        float height = 20;
 
         RaycastHit hit;
-        if (Physics.Raycast(subject.position, Vector3.down, out hit, 100, GroundLayers))
+        if (Physics.Raycast(subject.position + Vector3.up * 0.5f, Vector3.down, out hit, 100, GroundLayers))
         {
             height = hit.distance;
         }
@@ -116,6 +113,6 @@ public class CameraBehaviorPogo : MonoBehaviour
         lookDownAmt *= LOOK_DOWN_MAX_ROTATION;
 
 
-        lookDownAmtSmooth = Mathf.SmoothDamp(lookDownAmtSmooth, lookDownAmt, ref lookDownAmtSmoothVel, smoothTime);
+        lookDownAmtSmooth = Mathf.SmoothDamp(lookDownAmtSmooth, lookDownAmt, ref lookDownAmtSmoothVel, 0.2f);
     }
 }
