@@ -134,6 +134,7 @@ public class PlayerControls : MonoBehaviour
     void Jump()
     {
         if (!InputManager.instance.Pressed(InputManager.Buttons.A)) return;
+        if (!is_grounded) return;
 
         rb.velocity = new Vector3(
             rb.velocity.x,
