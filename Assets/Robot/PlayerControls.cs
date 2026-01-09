@@ -5,7 +5,8 @@ public class PlayerControls : MonoBehaviour
     public float MOVE_FORCE = 200f;
     public float AIR_MOVE_FORCE = 30f;
     public float MOVE_DRAG = 5f;
-    public float JUMP_POWER = 80f;
+    public float JUMP_POWER = 60f;
+    public float WALL_POWER = 40f;
 
     Rigidbody rb;
     Animator anim;
@@ -13,7 +14,7 @@ public class PlayerControls : MonoBehaviour
     public static PlayerControls instance;
 
     bool is_grounded = false;
-
+    LayerMask GroundLayers = 1 << 6;
 
     private void Awake()
     {
@@ -69,6 +70,7 @@ public class PlayerControls : MonoBehaviour
     void FixedUpdate()
     {
         GroundCheck();
+        WallCheck();
 
         Move();
         ApplyDrag();
@@ -77,9 +79,8 @@ public class PlayerControls : MonoBehaviour
 
     void GroundCheck()
     {
-        int layermask = 1 << 6;
         RaycastHit hit;
-        bool new_grounded = Physics.Raycast(rb.position + Vector3.up * 0.5f, Vector3.down, out hit, 1f, layermask);
+        bool new_grounded = Physics.Raycast(rb.position + Vector3.up * 0.5f, Vector3.down, out hit, 1f, GroundLayers);
 
         if (new_grounded && !is_grounded)
         {
@@ -93,6 +94,41 @@ public class PlayerControls : MonoBehaviour
         is_grounded = new_grounded;
     }
 
+    float wall = 0f;         // Raw wall detection result (-1, 0, 1)
+    float wall_anim = 0f;    // Smoothed wall value used by the animator
+
+    void WallCheck()
+    {
+        RaycastHit hit;
+
+        wall = 0f;
+
+        Vector3 origin = rb.position + Vector3.up;
+
+        // Check left side
+        if (Physics.Raycast(origin, -rb.transform.right, out hit, 0.6f, GroundLayers))
+        {
+            wall = -1f;
+        }
+        // Check right side
+        else if (Physics.Raycast(origin, rb.transform.right, out hit, 0.6f, GroundLayers))
+        {
+            wall = 1f;
+        }
+
+        // Smoothly move wall value toward target_wall
+        // This is clearer and safer than manually subtracting the difference
+        wall_anim = Mathf.MoveTowards(
+            wall_anim,
+            wall,
+            Time.deltaTime * 5f
+        );
+
+        // Update animator parameter
+        anim.SetFloat("Wall", wall_anim);
+    }
+
+
     void Land()
     {
         anim.CrossFadeInFixedTime("GroundMove", 0.2f);
@@ -105,7 +141,7 @@ public class PlayerControls : MonoBehaviour
 
     void LeaveGround()
     {
-        anim.CrossFadeInFixedTime("Falling", 0.2f);
+        anim.CrossFadeInFixedTime("Midair", 0.2f);
     }
 
     void Move()
@@ -134,7 +170,8 @@ public class PlayerControls : MonoBehaviour
     void Jump()
     {
         if (!InputManager.instance.Pressed(InputManager.Buttons.A)) return;
-        if (!is_grounded) return;
+        
+        if (!(is_grounded || Mathf.Abs(wall) > 0.1f)) return;
 
         rb.velocity = new Vector3(
             rb.velocity.x,
@@ -142,6 +179,12 @@ public class PlayerControls : MonoBehaviour
             rb.velocity.z);
 
         rb.AddForce(Vector3.up * JUMP_POWER, ForceMode.Impulse);
+
+        // add horizontal force if against wall
+        if (!is_grounded && Mathf.Abs(wall) > 0.1f)
+        {
+            rb.AddForce(-rb.transform.right * wall * WALL_POWER, ForceMode.Impulse);
+        }
 
         AudioManager.instance.ResetValues();
         AudioManager.instance.SetVol(0.35f);
