@@ -164,4 +164,10 @@ public static class MattMath
             Random.Range(-1f, 1f),
             Random.Range(-1f, 1f));
     }
+
+    public static Vector3 Flatten(Vector3 vec)
+    {
+        vec.y = 0;
+        return vec;
+    }
 }

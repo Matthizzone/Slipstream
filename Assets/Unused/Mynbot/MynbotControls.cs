@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
+public class MynbotControls : MonoBehaviour
 {
     public float MOVE_FORCE = 200f;
     public float AIR_MOVE_FORCE = 30f;
@@ -11,7 +11,7 @@ public class PlayerControls : MonoBehaviour
     Rigidbody rb;
     Animator anim;
 
-    public static PlayerControls instance;
+    public static MynbotControls instance;
 
     bool is_grounded = false;
     LayerMask GroundLayers = 1 << 6;
